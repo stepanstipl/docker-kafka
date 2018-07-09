@@ -3,7 +3,7 @@
 # Server Basics
 
 broker.id=${KAFKA_BROKER_ID}
-
+broker.rack=${KAFKA_BROKER_RACK:-null}
 
 # Socket Server Settings
 
