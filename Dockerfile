@@ -1,7 +1,7 @@
 FROM alpine:3.7
 
 ENV KAFKA_HOME=/opt/kafka \
-    KAFKA_VERSION=1.1.0 \
+    KAFKA_VERSION=1.0.1 \
     KAFKA_USER=kafka \
     KAFKA_UID=10000 \
     KAFKA_GROUP=kafka \
