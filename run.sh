@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 [ "${DEBUG}" == 'true' ] && set -x
 
+[ "$$" -eq 1 ] && exec /sbin/tini -- "$0" "$@"
+
 # Generate config file by default
 if [ ! -f "${KAFKA_CONF}" ]; then
   # Check mandatory variables are set

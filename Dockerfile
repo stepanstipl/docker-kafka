@@ -47,5 +47,4 @@ WORKDIR ${KAFKA_HOME}
 
 EXPOSE 9092
 
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["run.sh"]
+CMD ["/opt/kafka/bin/run.sh"]
