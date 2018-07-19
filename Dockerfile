@@ -26,6 +26,7 @@ RUN apk add --update --no-cache \
       openssl \
       bash \
       wget \
+      su-exec \
     && wget "${KAFKA_URL}/${KAFKA_VERSION}/${KAFKA_TGZ}" \
     && echo "${KAFKA_SHA}  ${KAFKA_TGZ}" > kafka.sha \
     && sha1sum -c kafka.sha \
