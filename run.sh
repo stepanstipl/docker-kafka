@@ -3,6 +3,16 @@
 
 [ "$$" -eq 1 ] && exec /sbin/tini -- "$0" "$@"
 
+# If we're started as root - fix directory ownership and drop privileges
+if [ "${EUID}" -eq 0 ]; then
+  for dir in ${KAFKA_LOG_DIRS//,/ }; do
+    chown -R "${KAFKA_USER}:${KAFKA_GROUP}" "${dir}"
+  done
+
+  # Drop to non-root user
+  exec su-exec "${KAFKA_USER}" "$0" "$@"
+fi
+
 # Generate config file by default
 if [ ! -f "${KAFKA_CONF}" ]; then
   # Check mandatory variables are set
