@@ -8,6 +8,7 @@ ENV KAFKA_HOME=/opt/kafka \
     KAFKA_GID=10000 \
     KAFKA_URL=http://mirror.ox.ac.uk/sites/rsync.apache.org/kafka \
     KAFKA_SHA=057cc111d354d2c20f0125d8e43b44682c69b381 \
+    KAFKA_LOG_DIRS=/data/kafka-logs \
     LANG=C.UTF-8 \
     JAVA_VERSION_ALPINE=8.171.11-r0 \
     JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
@@ -44,6 +45,8 @@ COPY server.properties.template ${KAFKA_CONF_TEMPLATE}
 
 USER ${KAFKA_USER}
 WORKDIR ${KAFKA_HOME}
+
+VOLUME ${KAFKA_LOG_DIRS}
 
 EXPOSE 9092
 

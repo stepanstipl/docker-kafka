@@ -5,7 +5,7 @@
 
 # If we're started as root - fix directory ownership and drop privileges
 if [ "${EUID}" -eq 0 ]; then
-  for dir in ${KAFKA_LOG_DIRS//,/ }; do
+  for dir in ${KAFKA_LOG_DIRS//,/$IFS}; do
     chown -R "${KAFKA_USER}:${KAFKA_GROUP}" "${dir}"
   done
 
