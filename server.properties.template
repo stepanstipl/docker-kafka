@@ -5,6 +5,8 @@
 broker.id=${KAFKA_BROKER_ID}
 broker.rack=${KAFKA_BROKER_RACK:-null}
 
+auto.create.topics.enable=${KAFKA_AUTO_CREATE_TOPICS_ENABLE:-"true"}
+
 # Socket Server Settings
 
 listeners=${KAFKA_LISTENERS:-"PLAINTEXT://0.0.0.0:9092"}
