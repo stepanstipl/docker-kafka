@@ -13,7 +13,12 @@ ENV KAFKA_HOME=/opt/kafka \
     JAVA_VERSION_ALPINE=8.171.11-r0 \
     JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
     JAVA_VERSION=8u171 \
-    SCALA_VERSION=2.12
+    SCALA_VERSION=2.12 \
+    JMX_DIR=/opt/jmx \
+    JMX_EXPORTER_URL=https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent \
+    JMX_EXPORTER_VERSION=0.3.1 \
+    JMX_CONFIG_URL=https://raw.githubusercontent.com/prometheus/jmx_exporter/parent \
+    KAFKA_OPTS=-javaagent:/opt/jmx/jmx_prometheus.jar=8080:/opt/jmx/kafka.yml
 
 ENV PATH=${PATH}:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin:${KAFKA_HOME}/bin \
     KAFKA_CONF=${KAFKA_HOME}/config/server.properties \
@@ -39,7 +44,10 @@ RUN apk add --update --no-cache \
     && mkdir ${KAFKA_HOME}/data ${KAFKA_HOME}/logs \
     && addgroup -g ${KAFKA_GID} ${KAFKA_GROUP} \
     && adduser -g "Kafka user" -D -h ${KAFKA_HOME} -G ${KAFKA_GROUP} -s /sbin/nologin -u ${KAFKA_UID} ${KAFKA_USER} \
-    && chown -R "${KAFKA_USER}:${KAFKA_GROUP}" "${KAFKA_HOME}"
+    && chown -R "${KAFKA_USER}:${KAFKA_GROUP}" "${KAFKA_HOME}" \
+    && mkdir "${JMX_DIR}" \
+    && wget "${JMX_EXPORTER_URL}/${JMX_EXPORTER_VERSION}/jmx_prometheus_javaagent-${JMX_EXPORTER_VERSION}.jar" -O "${JMX_DIR}/jmx_prometheus.jar" \
+    && wget "${JMX_CONFIG_URL}-${JMX_EXPORTER_VERSION}/example_configs/kafka-0-8-2.yml" -O "/${JMX_DIR}/kafka.yml"
 
 COPY run.sh ${KAFKA_HOME}/bin/
 COPY server.properties.template ${KAFKA_CONF_TEMPLATE}
@@ -50,5 +58,6 @@ WORKDIR ${KAFKA_HOME}
 VOLUME ${KAFKA_LOG_DIRS}
 
 EXPOSE 9092
+EXPOSE 8080
 
 CMD ["/opt/kafka/bin/run.sh"]
